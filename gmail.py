@@ -1,4 +1,3 @@
-import imp
 import os
 import pickle
 
@@ -51,3 +50,23 @@ def gmail_authenticate():
 
 # get the Gmail API service
 service = gmail_authenticate()
+
+# Add attachment to email
+def add_attachment(message, filename):
+    content_type, encoding = guess_mime_type(filename)
+    if content_type is None or encoding is not None:
+        content_type = 'application/octet-stream'
+    main_type, sub_type = content_type.split('/', 1)
+    fp = open(filename, 'rb')
+    if main_type == 'text':
+        msg = MIMEText(fp.read(), _subtype=sub_type)
+    elif main_type == 'image':
+        msg = MIMEImage(fp.read(), _subtype=sub_type)
+    elif main_type == 'audio':
+        msg = MIMEAudio(fp.read(), _subtype=sub_type)
+    else:
+        msg = MIMEBase(main_type, sub_type)
+    fp.close()
+    filename = os.path.basename(filename)
+    msg.add_header('Content-Disposition', 'attachment', filename=filename)
+    message.attach(msg)
