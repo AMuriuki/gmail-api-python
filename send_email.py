@@ -1,3 +1,4 @@
+from ast import parse
 import os
 import pickle
 
@@ -99,5 +100,15 @@ def send_message(service, destination, obj, body, attachments=[]):
     ).execute()
 
 
-send_message(service, recipients, "THIS IS THE SUBJECT",
-             "And this is the body of this test email", ["attachment1.txt", "test.png"])
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(
+        description="Email Sender using Gmail API")
+    parser.add_argument("subject", type=str, help="The subject of the email")
+    parser.add_argument("body", type=str, help="The body of the email")
+    parser.add_argument("-f", "--files", type=str,
+                        help='Email attachments', nargs="+")
+
+    args = parser.parse_args()
+    service = gmail_authenticate()
+    send_message(service, recipients, args.subject, args.body, args.files)
