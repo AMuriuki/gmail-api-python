@@ -28,3 +28,15 @@ python3 -m venv venv
 pip install -r requirements.txt
 ```
 
+5. Edit `env.example` accordingly and rename to `.env`
+```
+email_address="youremail@gmail.com"
+
+# add email recipients seperated by a comma
+recipients="someemail@example.com, anotheremail@example.com"
+```
+
+6. To send email:
+```
+python send_email.py
+```
