@@ -22,9 +22,7 @@ from decouple import config
 # Request all access (permission to read/send/receive emails & manage inbox and more)
 SCOPES = ['https://mail.google.com/']
 email_address = config('email_address')
-
-# add email recipients seperated by a comma
-recipients = "emailone@something.com, emailtwo@something.com, emailthree@something.com"
+recipients = config('recipients')
 
 
 def gmail_authenticate():
