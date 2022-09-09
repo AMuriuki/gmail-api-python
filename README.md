@@ -1,4 +1,4 @@
-# Using Gmail API in Python
+# Using Gmail API with Python
 This project uses Gmail API to send, search, delete and mark emails as read or unread.
 
 ## Getting Started
