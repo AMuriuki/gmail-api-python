@@ -52,6 +52,8 @@ def gmail_authenticate():
 service = gmail_authenticate()
 
 # Add attachment to email
+
+
 def add_attachment(message, filename):
     content_type, encoding = guess_mime_type(filename)
     if content_type is None or encoding is not None:
@@ -70,3 +72,27 @@ def add_attachment(message, filename):
     filename = os.path.basename(filename)
     msg.add_header('Content-Disposition', 'attachment', filename=filename)
     message.attach(msg)
+
+
+def build_message(destination, obj, body, attachments=[]):
+    if not attachments:
+        message = MIMEText(body)
+        message['to'] = destination
+        message['from'] = email_address
+        message['subject'] = obj
+    else:
+        message = MIMEMultipart()
+        message['to'] = destination
+        message['from'] = email_address
+        message['subject'] = obj
+        message.attach(MIMEText(body))
+        for filename in attachments:
+            add_attachment(message, filename)
+    return {'raw': urlsafe_b64encode(message.as_bytes()).decode()}
+
+
+def send_message(service, destination, obj, body, attachments=[]):
+    return service.users().messages().send(
+        userId="me",
+        body=build(destination, obj, body, attachments)
+    ).execute()
